@@ -1,0 +1,28 @@
+body {
+    background-image: url('./il_794xN.3507767974_mz53.avif');
+    background-size: cover;
+}
+
+#result {
+    display: flex;
+}
+
+.letter {
+    display: block;
+    width: 32px;
+    height: 32px;
+    background-color: rgb(247, 92, 2);
+    margin: 0 2em;
+    border: 1px solid rgb(248, 234, 174);
+    text-align: center;
+    border-radius: 15%;
+}
+
+body{
+    background-image: url(../images/pendu.jpg) ;
+    background-size: cover;
+    background-position: bottom;
+    background-attachment: fixed;
+    background-position-x: 19rem;
+    background-position-y: -22rem;
+}
