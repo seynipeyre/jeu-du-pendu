@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/resset.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>Jeu du pendu</title>
+</head>
+<body class="bg-slate-900">
+    <main class="h-screen flex flex-col items-center justify-around">
+
+        <div>
+
+            <h1 class="text-3xl font-bold underline text-center text-white decoration-red-500">
+                Mon premier pendu
+            </h1>
+            <div class="h-10"></div>
+            <h2 class="text-3xl font-bold  text-white p-5 border-double border-4 border-red-600">
+                Nb Errors : 
+                <span id="nb_errors">0</span> 
+            </h2>
+           
+        </div class="">
+        <div class="text-white mon-image" data-name="">
+            <p id="result" class="flex flex-wrap">
+            </p>
+        </div>
+        
+            <button id="generate"
+                class="delay-150 bg-red-700 text-gray-50 bg-gray-200 relative inline-block flex-shrink-0 border-2 border-transparent rounded-full cursor-pointer p-2">
+                Play
+            </button>
+        </div>    
+    </main>
+    
+</body>
+<script>
+    let words = ["saperlipopette", "crevette", "cacahuette", "pastèque"];
+    let used_words = [];
+    let nb_errors = 0;
+
+    function get_random_word() {
+        if (words.length == 0) {
+            // Il ne me reste plus de mots à trouver... Je réinitialise le tableau words
+            words = [...used_words]
+            used_words = []
+        }
+        let random_index = Math.trunc(Math.random() * words.length)
+        let word = words[random_index]
+        used_words.push(word)
+        words.splice(random_index, 1)
+        return word
+
+    }
+
+    function select_a_word() {
+        document.body.removeEventListener('keyup', search_if_letter_is_in_word)
+        document.body.addEventListener('keyup', search_if_letter_is_in_word);
+
+        let word = get_random_word();
+        document.querySelector("#result").innerHTML = ''
+
+        console.warn(word)
+        for (letter of word) {
+            const newSpan = document.createElement("span");
+            newSpan.classList.add('letter');
+            newSpan.setAttribute('data-letter', letter.toLowerCase());
+            document.querySelector("#result").appendChild(newSpan);
+        }
+        // document.querySelector("#result").innerText = word;
+    }
+
+    function display_nberrors() {
+        document.querySelector('#nb_errors').innerText = nb_errors;
+    }
+    document.querySelector('#generate').addEventListener('click', select_a_word)
+
+
+
+    let nb_letters_found = 0;
+    let letters_found = [];
+    let letters_in_error = [];
+    
+    const search_if_letter_is_in_word = (event) => {
+        let letter_pressed = event.key.toLowerCase();
+
+        let cells = document.querySelectorAll('.letter');
+
+        // Je vérifie que ce n'est pas une lettre déjà recherchée au préalable.
+        if (!letters_found.includes(letter_pressed)) {
+
+            let found = false;
+            for (let cell of cells) {
+                if (cell.getAttribute('data-letter') == letter_pressed) {
+                    cell.innerHTML = letter_pressed
+                    found = true
+                    nb_letters_found++;
+                    letters_found.push(letter_pressed)
+                }
+            }
+            if (!found) {
+                nb_errors++
+            }
+        }
+
+        console.log(nb_letters_found, "VS", cells.length)
+        if (nb_letters_found == cells.length) {
+            console.warn("Vous avez gagné !!!")
+        }
+
+        display_nberrors()
+    }
+
+</script>
+
+</html>
